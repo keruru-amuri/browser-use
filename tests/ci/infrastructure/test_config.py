@@ -84,7 +84,8 @@ class TestLazyConfig:
 
 			# Test default path expansion
 			os.environ.pop('XDG_CACHE_HOME', None)
-			assert '/.cache' in str(CONFIG.XDG_CACHE_HOME)
+			# Be platform agnostic: check the final directory name instead of path separator
+		assert CONFIG.XDG_CACHE_HOME.name == '.cache'
 		finally:
 			if original_value:
 				os.environ['XDG_CACHE_HOME'] = original_value
