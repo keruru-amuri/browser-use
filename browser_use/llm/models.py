@@ -15,6 +15,7 @@ import os
 from typing import TYPE_CHECKING
 
 from browser_use.llm.azure.chat import ChatAzureOpenAI
+from browser_use.llm.azure_foundry.chat import ChatAzureFoundry
 from browser_use.llm.browser_use.chat import ChatBrowserUse
 from browser_use.llm.cerebras.chat import ChatCerebras
 from browser_use.llm.google.chat import ChatGoogle
@@ -209,6 +210,10 @@ def get_llm_by_name(model_name: str):
 		api_key = os.getenv('BROWSER_USE_API_KEY')
 		return ChatBrowserUse(model=model, api_key=api_key)
 
+	# Azure Foundry Models
+	elif provider == 'azure_foundry':
+		return ChatAzureFoundry(model=model_part.replace('_', '-'))
+
 	else:
 		available_providers = ['openai', 'azure', 'google', 'oci', 'cerebras', 'bu']
 
@@ -223,6 +228,8 @@ def __getattr__(name: str) -> 'BaseChatModel':
 		return ChatOpenAI  # type: ignore
 	elif name == 'ChatAzureOpenAI':
 		return ChatAzureOpenAI  # type: ignore
+	elif name == 'ChatAzureFoundry':
+		return ChatAzureFoundry  # type: ignore
 	elif name == 'ChatGoogle':
 		return ChatGoogle  # type: ignore
 
@@ -249,6 +256,7 @@ def __getattr__(name: str) -> 'BaseChatModel':
 __all__ = [
 	'ChatOpenAI',
 	'ChatAzureOpenAI',
+	'ChatAzureFoundry',
 	'ChatGoogle',
 	'ChatMistral',
 	'ChatCerebras',
